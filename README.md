@@ -6,7 +6,7 @@
 [![Cljdoc badge](https://cljdoc.org/badge/taipei.404/html-to-hiccup)](https://cljdoc.org/d/taipei.404/html-to-hiccup/CURRENT)
 [![Clojars download_badge](https://img.shields.io/clojars/dt/taipei.404/html-to-hiccup?color=opal)](https://clojars.org/taipei.404/html-to-hiccup)
 
-A tiny, simple and truly cross platform (CLJC) `html->hiccup` function
+A tiny, simple and truly cross-platform (CLJC) `html->hiccup` function
 which does not rely on the browser.
 
 ## Installation
