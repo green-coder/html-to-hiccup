@@ -3,46 +3,47 @@
             [taipei-404.html :refer [html->hiccup]]))
 
 (deftest html->hiccup-test
-  (are [html hiccup]
-    (= (html->hiccup html) hiccup)
+  (testing "the basic usage"
+    (are [html hiccup]
+      (= (html->hiccup html) hiccup)
 
-    ;; Obligatory test
-    "<p>hello, world</p>"
-    '([:p "hello, world"])
+      ;; Obligatory test
+      "<p>hello, world</p>"
+      '([:p "hello, world"])
 
-    ;; Nested elements
-    "<p><ol><li>a</li><li>b</li><li>c</li></ol></p>"
-    '([:p
-       [:ol
-        [:li "a"]
-        [:li "b"]
-        [:li "c"]]])
+      ;; Nested elements
+      "<p><ol><li>a</li><li>b</li><li>c</li></ol></p>"
+      '([:p
+         [:ol
+          [:li "a"]
+          [:li "b"]
+          [:li "c"]]])
 
-    ;; Sequence of html tags separated by texts
-    "a<p/>b<img/>c"
-    '("a"
-       [:p]
-      "b"
-      [:img]
-      "c")
+      ;; Sequence of html tags separated by texts
+      "a<p/>b<img/>c"
+      '("a" [:p] "b" [:img] "c")
 
-    ;; Void elements
-    "<br><hr>"
-    '([:br] [:hr])
+      ;; Void elements
+      "<br><hr>"
+      '([:br] [:hr])
 
-    ;; Void element with attributes
-    "<img hidden src=\"flower.jpg\" alt=\"A flower\" width=\"500\" height=\"600\" style=\"border:5px solid black\">"
-    '([:img {:hidden true
-             :src "flower.jpg"
-             :alt "A flower"
-             :width "500"
-             :height "600"
-             :style "border:5px solid black"}])
+      ;; Void element with attributes
+      "<img hidden src=\"flower.jpg\" alt=\"A flower\" width=\"500\" height=\"600\" style=\"border:5px solid black\">"
+      '([:img {:hidden true
+               :src    "flower.jpg"
+               :alt    "A flower"
+               :width  "500"
+               :height "600"
+               :style  "border:5px solid black"}])
 
-    ;; A comment
-    "<!--Some useful comment-->"
-    '()
+      ;; That thing that goes before the html element
+      "<!doctype html>"
+      '([:!doctype {:html true}])))
 
-    ;; That thing that goes before the html element
-    "<!doctype html>"
-    '([:!doctype {:html true}])))
+  (testing "the :discard-comments option"
+    (is (= (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
+                         {:comment-keyword :!--})
+           '([:!-- "Some useful comment"] [:p [:!-- "Here also"]])))
+    (is (= (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
+                         {:comment-keyword nil})
+          '([:p])))))

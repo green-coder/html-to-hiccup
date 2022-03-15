@@ -16,7 +16,7 @@ which does not rely on the browser.
 ## Feature
 
 - Truly cross-platform (CLJC), does not rely on the browser.
-- Tiny: under 50 lines of code.
+- Tiny source code, easy to digest.
 - Highly hackable. Fork me as soon as needed!
 
 ## Usage

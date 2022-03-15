@@ -26,23 +26,26 @@
 
 (defn html->hiccup
   "A simple cross-platform (CLJC) html->hiccup converter."
-  [html-str]
-  (->> (html-parser html-str)
-       (insta/transform {:nodes                 (fn [& nodes] (remove nil? nodes))
-                         :comment-element       (constantly nil)
-                         :void-element-tag-name keyword
-                         :void-element-tag      (fn ([tag-name] [tag-name])
-                                                    ([tag-name attributes] [tag-name attributes]))
-                         :open-close-tags       (fn [opening-tag nodes _closing-tag]
-                                                  (into opening-tag nodes))
-                         :opening-tag           (fn ([tag-name] [tag-name])
-                                                    ([tag-name attributes] [tag-name attributes]))
-                         :self-closing-tag      (fn ([tag-name] [tag-name])
-                                                    ([tag-name attributes] [tag-name attributes]))
-                         :tag-name              keyword
-                         :attributes            (fn [& attributes]
-                                                  (into {} attributes))
-                         :attribute             (fn ([attribute-name]
-                                                     [(keyword attribute-name) true])
-                                                    ([attribute-name attribute-value]
-                                                     [(keyword attribute-name) (edn/read-string attribute-value)]))})))
+  ([html-str] (html->hiccup html-str nil))
+  ([html-str {:as options :keys [comment-keyword]}]
+   (->> (html-parser html-str)
+        (insta/transform {:nodes                 (fn [& nodes] (remove nil? nodes))
+                          :comment-element       (fn [& comment]
+                                                   (when (some? comment-keyword)
+                                                     [comment-keyword (apply str comment)]))
+                          :void-element-tag-name keyword
+                          :void-element-tag      (fn ([tag-name] [tag-name])
+                                                     ([tag-name attributes] [tag-name attributes]))
+                          :open-close-tags       (fn [opening-tag nodes _closing-tag]
+                                                   (into opening-tag nodes))
+                          :opening-tag           (fn ([tag-name] [tag-name])
+                                                     ([tag-name attributes] [tag-name attributes]))
+                          :self-closing-tag      (fn ([tag-name] [tag-name])
+                                                     ([tag-name attributes] [tag-name attributes]))
+                          :tag-name              keyword
+                          :attributes            (fn [& attributes]
+                                                   (into {} attributes))
+                          :attribute             (fn ([attribute-name]
+                                                      [(keyword attribute-name) true])
+                                                     ([attribute-name attribute-value]
+                                                      [(keyword attribute-name) (edn/read-string attribute-value)]))}))))
