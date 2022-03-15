@@ -34,7 +34,7 @@
                          :void-element-tag      (fn ([tag-name] [tag-name])
                                                     ([tag-name attributes] [tag-name attributes]))
                          :open-close-tags       (fn [opening-tag nodes _closing-tag]
-                                                  (into opening-tag (remove nil?) nodes))
+                                                  (into opening-tag nodes))
                          :opening-tag           (fn ([tag-name] [tag-name])
                                                     ([tag-name attributes] [tag-name attributes]))
                          :self-closing-tag      (fn ([tag-name] [tag-name])
