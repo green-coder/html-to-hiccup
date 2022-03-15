@@ -1,0 +1,26 @@
+{:paths   ["src"]
+ :deps    {instaparse/instaparse {:mvn/version "1.4.10"}}
+ :aliases {:dev      {:extra-deps {org.clojure/clojure       {:mvn/version "1.10.3"}
+                                   org.clojure/clojurescript {:mvn/version "1.11.4"}}}
+           :test     {:extra-paths ["test"]
+                      :extra-deps  {lambdaisland/kaocha           {:mvn/version "1.63.998"}
+                                    lambdaisland/kaocha-cljs      {:mvn/version "1.0.107"}
+                                    lambdaisland/kaocha-junit-xml {:mvn/version "0.0.76"}}}
+
+           ; clojure -M:outdated --upgrade
+           :outdated {:extra-deps {com.github.liquidz/antq {:mvn/version "1.6.0"}}
+                      :main-opts  ["-m" "antq.core"]}
+
+           :depstar  {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.303"}}
+                      :exec-fn      hf.depstar/jar
+                      :exec-args    {:sync-pom    true
+                                     :group-id    "taipei.404"
+                                     :artifact-id "html-to-hiccup"
+                                     :version     "0.1.0"
+                                     :jar         "html-to-hiccup.jar"}}}}
+;; Memo for deploying a new release:
+;; - Change the version above, then build the jar:
+;;     clojure -X:depstar
+;; - add a tag "v0.x.y" to the latest commit and push to repo
+;; - deploy:
+;;     mvn deploy:deploy-file -Dfile=html-to-hiccup.jar -DpomFile=pom.xml -DrepositoryId=clojars -Durl=https://clojars.org/repo/
