@@ -15,7 +15,7 @@
   opening-tag = <'<'> <spaces>? tag-name attributes? <spaces>? <'>'>
   closing-tag = <'</'> tag-name <'>'>
   self-closing-tag = <'<'> <spaces>? tag-name attributes? <spaces>? <'/>'>
-  tag-name = #'[^ />]+'
+  tag-name = #'[^ \t/>]+'
   attributes = (<spaces> attribute)+
   attribute = attribute-name (<'='> attribute-value)?
   <attribute-name> = #'[^ \t=>]+'
