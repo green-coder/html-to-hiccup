@@ -36,6 +36,10 @@
                :height "600"
                :style  "border:5px solid black"}])
 
+      ;; Element with unquoted attribute
+      "<script src=/foo/bar/baz.js></script>"
+      '([:script {:src "/foo/bar/baz.js"}])
+
       ;; That thing that goes before the html element
       "<!doctype html>"
       '([:!doctype {:html true}])))

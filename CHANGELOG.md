@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed a bug where the unquoted attribute values were erroneously parsed via `edn/read-string`.
+
 ## v0.1.1
 
 ### Added
