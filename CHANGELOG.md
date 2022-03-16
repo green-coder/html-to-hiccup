@@ -3,9 +3,12 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## v0.1.2
+
 ### Fixed
 
-- Fixed a bug where the unquoted attribute values were erroneously parsed via `edn/read-string`.
+- Fixed #1, a bug where the unquoted attribute values were erroneously parsed via `edn/read-string`.
+- Fixed grammar: tag names can be ended using a tab.
 
 ## v0.1.1
 
