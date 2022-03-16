@@ -23,6 +23,11 @@
       "a<p/>b<img/>c"
       '("a" [:p] "b" [:img] "c")
 
+      ;; Tab used instead of spaces
+      "<a\thref=\"#anchor\"\thidden\t/>"
+      '([:a {:href "#anchor"
+             :hidden true}])
+
       ;; Void elements
       "<br><hr>"
       '([:br] [:hr])
