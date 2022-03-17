@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## v0.1.3
+
+### Added
+
+- Added the function `taipei-404.html/minify-hiccup`.
+- Added more tests.
+
 ## v0.1.2
 
 ### Fixed

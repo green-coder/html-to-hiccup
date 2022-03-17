@@ -1,6 +1,6 @@
 (ns taipei-404.html-test
   (:require [clojure.test :refer [deftest testing is are]]
-            [taipei-404.html :refer [html->hiccup]]))
+            [taipei-404.html :refer [html->hiccup minify-hiccup]]))
 
 (deftest html->hiccup-test
   (testing "the basic usage"
@@ -56,3 +56,15 @@
     (is (= (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
                          {:comment-keyword nil})
           '([:p])))))
+
+(deftest minify-hiccup-test
+  (is (= [:ul [:li [:p "foo"] [:p "bar"]]]
+         (minify-hiccup
+           (first
+             (html->hiccup
+               "<ul>\n<li>\n<p>foo</p>\n<p>bar</p>\n</li>\n</ul>\n")))))
+  (is (= [:p [:pre " " [:code "\n(def a 1)"] " "]]
+         (minify-hiccup
+           (first
+             (html->hiccup
+               "<p> <pre> <code>\n(def a 1)</code> </pre> </p>"))))))

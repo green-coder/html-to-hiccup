@@ -1,5 +1,6 @@
 (ns taipei-404.html
-  (:require [clojure.edn :as edn]
+  (:require [clojure.string :as str]
+            [clojure.edn :as edn]
             [instaparse.core :as insta :refer [defparser]]))
 
 (defparser html-parser "
@@ -51,3 +52,17 @@
                                                         ([attribute-name attribute-value]
                                                          [(keyword attribute-name) attribute-value]))
                           :quoted-attribute-value   (fn [quoted-value] (edn/read-string quoted-value))}))))
+
+(defn minify-hiccup
+  "Get rid of blank strings where it doesn't influence the html semantic."
+  [hiccup]
+  (cond
+    (nil? hiccup) hiccup
+    (string? hiccup) (not-empty (str/trim hiccup))
+    (vector? hiccup) (let [[tag-kw & children] hiccup]
+                       (if (= tag-kw :pre)
+                         hiccup
+                         (into [tag-kw]
+                               (comp (map minify-hiccup)
+                                     (remove nil?))
+                               children)))))
