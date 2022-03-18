@@ -57,7 +57,6 @@
   "Get rid of blank strings where it doesn't influence the html semantic."
   [hiccup]
   (cond
-    (nil? hiccup) hiccup
     (string? hiccup) (not-empty (str/trim hiccup))
     (vector? hiccup) (let [[tag-kw & children] hiccup]
                        (if (= tag-kw :pre)
@@ -65,4 +64,5 @@
                          (into [tag-kw]
                                (comp (map minify-hiccup)
                                      (remove nil?))
-                               children)))))
+                               children)))
+    :else hiccup))
