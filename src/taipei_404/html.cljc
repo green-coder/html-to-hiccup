@@ -1,7 +1,8 @@
 (ns taipei-404.html
   (:require [clojure.string :as str]
             [clojure.edn :as edn]
-            [instaparse.core :as insta :refer [defparser]]))
+            #?(:clj [instaparse.core :as insta :refer [defparser]]
+               :cljs [instaparse.core :as insta :refer-macros [defparser]])))
 
 (defparser html-parser "
   nodes = node*
