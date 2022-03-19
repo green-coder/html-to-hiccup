@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## v0.1.4
+
+### Fixed
+
+- Made `taipei-404.html/minify-hiccup` more robust.
+- Fixed the `requires` to work in Clojurescript.
+
 ## v0.1.3
 
 ### Added
