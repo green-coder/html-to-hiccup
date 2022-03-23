@@ -8,15 +8,15 @@
   nodes = node*
   <node> = comment-element | void-element-tag | open-close-tags | self-closing-tag | text
   comment-element = <'<!--'> (!'-->' #'.')* <'-->'>
-  void-element-tag = <'<'> <spaces>? void-element-tag-name attributes? <spaces>? <'>'>
+  void-element-tag = <'<'> <maybe-spaces> void-element-tag-name attributes? <maybe-spaces> <'>'>
   void-element-tag-name = 'area' | 'base' | 'basefont' | 'bgsound' | 'br' | 'col' |
                           'command' | 'embed' | 'frame' | 'hr' | 'img' | 'input' | 'isindex' |
                           'keygen' | 'link' | 'menuitem' | 'meta' | 'nextid' | 'param' |
                           'source' | 'track' | 'wbr' | (!'!--' #'![^ />]+')
   open-close-tags = opening-tag nodes closing-tag
-  opening-tag = <'<'> <spaces>? tag-name attributes? <spaces>? <'>'>
+  opening-tag = <'<'> <maybe-spaces> tag-name attributes? <maybe-spaces> <'>'>
   closing-tag = <'</'> tag-name <'>'>
-  self-closing-tag = <'<'> <spaces>? tag-name attributes? <spaces>? <'/>'>
+  self-closing-tag = <'<'> <maybe-spaces> tag-name attributes? <maybe-spaces> <'/>'>
   tag-name = #'[^ \t/>]+'
   attributes = (<spaces> attribute)+
   attribute = attribute-name (<'='> (unquoted-attribute-value | quoted-attribute-value))?
@@ -24,6 +24,7 @@
   <unquoted-attribute-value> = #'[^ \t>]+'
   quoted-attribute-value = #'\"[^\"]*\"'
   <text> = #'[^<]+'
+  maybe-spaces = #'[ \t]*'
   spaces = #'[ \t]+'
 ")
 
