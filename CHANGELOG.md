@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## v0.1.5
+
+### Improved
+
+- Removed any potential chances at having the grammar ambiguous.
+  It also simplifies the parsing by Instaparse and probably makes it more efficient.
+- Made the implementation of `minify-hiccup` very explicit and easier to
+  clone and modify for people who will need it.
+- Improved the tests.
+
 ## v0.1.4
 
 ### Fixed
