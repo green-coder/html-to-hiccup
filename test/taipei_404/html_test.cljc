@@ -58,13 +58,29 @@
           '([:p])))))
 
 (deftest minify-hiccup-test
-  (is (= [:ul [:li [:p "foo"] [:p "bar"]]]
-         (minify-hiccup
-           (first
-             (html->hiccup
-               "<ul>\n<li>\n<p>foo</p>\n<p>bar</p>\n</li>\n</ul>\n")))))
-  (is (= [:p [:pre " " [:code "\n(def a 1)"] " "]]
-         (minify-hiccup
-           (first
-             (html->hiccup
-               "<p> <pre> <code>\n(def a 1)</code> </pre> </p>"))))))
+  (testing "that blank strings are discarded"
+    (is (= [:ul [:li [:p "foo"] [:p "bar"]]]
+           (minify-hiccup
+             (first
+               (html->hiccup
+                 "<ul>\n<li>\n<p>foo</p>\n<p>bar</p>\n</li>\n</ul>\n"))))))
+
+  (testing "that anything within [:pre ,,,] remains unchanged"
+    (is (= [:p [:pre " " [:code "\n(def a 1)"] " "]]
+           (minify-hiccup
+             (first
+               (html->hiccup
+                 "<p> <pre> <code>\n(def a 1)</code> </pre> </p>"))))))
+
+  (testing "that the attributes are not discarded"
+    (is (= [:ol {:start "123456789"} [:li "ok"]]
+           (minify-hiccup
+             (first
+               (html->hiccup
+                 "<ol start=\"123456789\">\n<li>ok</li>\n</ol>\n"))))))
+
+  (testing "that empty property hashmaps are discarded"
+    (is (= [:p "hi"]
+           (minify-hiccup [:p nil "hi"])))
+    (is (= [:p "hi"]
+           (minify-hiccup [:p {} "hi"])))))
