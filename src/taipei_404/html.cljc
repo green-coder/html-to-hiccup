@@ -59,11 +59,18 @@
   [hiccup]
   (cond
     (string? hiccup) (not-empty (str/trim hiccup))
+    (map? hiccup) hiccup
     (vector? hiccup) (let [[tag-kw & children] hiccup]
                        (if (= tag-kw :pre)
                          hiccup
-                         (into [tag-kw]
-                               (comp (map minify-hiccup)
-                                     (remove nil?))
-                               children)))
+                         (let [[first-child & rest-children] children
+                               [props children] (if (or (nil? first-child)
+                                                        (map? first-child))
+                                                  [first-child rest-children]
+                                                  [nil children])]
+                           (-> [tag-kw]
+                               (cond-> (seq props) (conj (minify-hiccup props)))
+                               (into (comp (map minify-hiccup)
+                                           (remove nil?))
+                                     children)))))
     :else hiccup))
