@@ -14,18 +14,18 @@
                           'keygen' | 'link' | 'menuitem' | 'meta' | 'nextid' | 'param' |
                           'source' | 'track' | 'wbr' | (!'!--' #'![^ />]+')
   open-close-tags = opening-tag nodes closing-tag
-  tag-name = #'[^ \t/>]+'
   opening-tag = <'<'> tag-name attributes? <maybe-spaces> <'>'>
   closing-tag = <'</'> tag-name <maybe-spaces> <'>'>
   self-closing-tag = <'<'> tag-name attributes? <maybe-spaces> <'/>'>
+  tag-name = #'[^ \t\f\r\n/>]+'
   attributes = (<spaces> attribute)+
-  <attribute-name> = #'[^ \t=>]+'
-  <unquoted-attribute-value> = #'[^ \t>]+'
   attribute = attribute-name (<maybe-spaces> <'='> <maybe-spaces> (unquoted-attribute-value | quoted-attribute-value))?
+  <attribute-name> = #'[^ \t\f\r\n=>]+'
+  <unquoted-attribute-value> = #'[^ \t\f\r\n>]+'
   quoted-attribute-value = #'\"[^\"]*\"'
   <text> = #'[^<]+'
-  maybe-spaces = #'[ \t]*'
-  spaces = #'[ \t]+'
+  maybe-spaces = #'[ \t\f\r\n]*'
+  spaces = #'[ \t\f\r\n]+'
 ")
 
 (defn html->hiccup
