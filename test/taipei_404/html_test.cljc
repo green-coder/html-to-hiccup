@@ -5,7 +5,7 @@
 (deftest html->hiccup-test
   (testing "the basic usage"
     (are [html hiccup]
-      (= (html->hiccup html) hiccup)
+      (= hiccup (html->hiccup html))
 
       ;; Obligatory test
       "<p>hello, world</p>"
@@ -57,12 +57,12 @@
       '("a" [:p] "b" [:img {:src "/flower.jpg", :alt "A flower"}] "c")))
 
   (testing "the :discard-comments option"
-    (is (= (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
-                         {:comment-keyword :!--})
-           '([:!-- "Some useful comment"] [:p [:!-- "Here also"]])))
-    (is (= (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
-                         {:comment-keyword nil})
-          '([:p])))))
+    (is (= '([:!-- "Some useful comment"] [:p [:!-- "Here also"]])
+           (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
+                         {:comment-keyword :!--})))
+    (is (= '([:p])
+           (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
+                          {:comment-keyword nil})))))
 
 (deftest minify-hiccup-test
   (testing "that blank strings are discarded"
