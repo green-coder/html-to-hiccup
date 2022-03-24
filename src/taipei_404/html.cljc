@@ -1,6 +1,5 @@
 (ns taipei-404.html
   (:require [clojure.string :as str]
-            [clojure.edn :as edn]
             #?(:clj [instaparse.core :as insta :refer [defparser]]
                :cljs [instaparse.core :as insta :refer-macros [defparser]])))
 
@@ -19,10 +18,12 @@
   self-closing-tag = <'<'> tag-name attributes? <maybe-spaces> <'/>'>
   tag-name = #'[^ \"\\'\t\f\r\n/>]+'
   attributes = (<spaces> attribute)+
-  attribute = attribute-name (<maybe-spaces> <'='> <maybe-spaces> (unquoted-attribute-value | quoted-attribute-value))?
+  attribute = attribute-name (<maybe-spaces> <'='> <maybe-spaces> attribute-value)?
+  <attribute-value> = unquoted-attribute-value | single-quoted-attribute-value | double-quoted-attribute-value
   <attribute-name> = #'[^ \"\\'\t\f\r\n=>]+'
   <unquoted-attribute-value> = #'[^ \"\\'\t\f\r\n>]+'
-  quoted-attribute-value = #'\"[^\"]*\"'
+  <single-quoted-attribute-value> = <'\\''> #'[^\\']*' <'\\''>
+  <double-quoted-attribute-value> = <'\"'> #'[^\"]*' <'\"'>
   <text> = #'[^<]+'
   maybe-spaces = #'[ \t\f\r\n]*'
   spaces = #'[ \t\f\r\n]+'
@@ -52,8 +53,7 @@
                           :attribute                (fn ([attribute-name]
                                                          [(keyword attribute-name) true])
                                                         ([attribute-name attribute-value]
-                                                         [(keyword attribute-name) attribute-value]))
-                          :quoted-attribute-value   (fn [quoted-value] (edn/read-string quoted-value))}))))
+                                                         [(keyword attribute-name) attribute-value]))}))))
 
 (defn minify-hiccup
   "Get rid of blank strings where it doesn't influence the html semantic."
