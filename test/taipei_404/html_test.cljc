@@ -23,11 +23,6 @@
       "a<p/>b<img/>c"
       '("a" [:p] "b" [:img] "c")
 
-      ;; Tab used instead of spaces
-      "<a\thref=\"#anchor\"\thidden\t/>"
-      '([:a {:href "#anchor"
-             :hidden true}])
-
       ;; Void elements
       "<br><hr>"
       '([:br] [:hr])
@@ -45,9 +40,21 @@
       "<script src=/foo/bar/baz.js></script>"
       '([:script {:src "/foo/bar/baz.js"}])
 
+      ;; Single quoted attributes
+      "<script src='/foo/bar/baz.js'></script>"
+      '([:script {:src "/foo/bar/baz.js"}])
+
+      ;; Double quoted attributes
+      "<script src=\"/foo/bar/baz.js\"></script>"
+      '([:script {:src "/foo/bar/baz.js"}])
+
       ;; That thing that goes before the html element
       "<!doctype html>"
-      '([:!doctype {:html true}])))
+      '([:!doctype {:html true}])
+
+      ;; With space-like characters everywhere inside the tags
+      "a<p \n/>b<img src = /flower.jpg \r\n\f alt = \"A flower\" \n />c"
+      '("a" [:p] "b" [:img {:src "/flower.jpg", :alt "A flower"}] "c")))
 
   (testing "the :discard-comments option"
     (is (= (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
