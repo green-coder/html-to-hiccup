@@ -4,7 +4,7 @@
   <packaging>jar</packaging>
   <groupId>taipei.404</groupId>
   <artifactId>html-to-hiccup</artifactId>
-  <version>0.1.5</version>
+  <version>0.1.6</version>
   <name>html-to-hiccup</name>
   <scm>
     <url>https://github.com/green-coder/html-to-hiccup</url>

@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## v0.1.6
+
+### Improved
+
+- Improved the grammar w.r.t. the spaces, based on https://html.spec.whatwg.org/multipage/syntax.html.
+- Improved the grammar w.r.t. the whitespaces.
+- Added support for single-quoted attribute values.
+
+### Broke
+
+- Made the `html->hiccup` function not using `edn/read-string` anymore.
+  It's a change of behavior as the text now stays raw, unescaped.
+
 ## v0.1.5
 
 ### Improved
