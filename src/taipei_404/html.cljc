@@ -1,6 +1,5 @@
 (ns taipei-404.html
   (:require [clojure.string :as str]
-            [clojure.edn :as edn]
             #?(:clj [instaparse.core :as insta :refer [defparser]]
                :cljs [instaparse.core :as insta :refer-macros [defparser]])))
 
@@ -8,24 +7,26 @@
   nodes = node*
   <node> = comment-element | void-element-tag | open-close-tags | self-closing-tag | text
   comment-element = <'<!--'> (!'-->' #'.')* <'-->'>
-  void-element-tag = <'<'> <maybe-spaces> void-element-tag-name attributes? <maybe-spaces> <'>'>
+  void-element-tag = <'<'> void-element-tag-name attributes? <maybe-spaces> <'>'>
   void-element-tag-name = 'area' | 'base' | 'basefont' | 'bgsound' | 'br' | 'col' |
                           'command' | 'embed' | 'frame' | 'hr' | 'img' | 'input' | 'isindex' |
                           'keygen' | 'link' | 'menuitem' | 'meta' | 'nextid' | 'param' |
                           'source' | 'track' | 'wbr' | (!'!--' #'![^ />]+')
   open-close-tags = opening-tag nodes closing-tag
-  opening-tag = <'<'> <maybe-spaces> tag-name attributes? <maybe-spaces> <'>'>
-  closing-tag = <'</'> tag-name <'>'>
-  self-closing-tag = <'<'> <maybe-spaces> tag-name attributes? <maybe-spaces> <'/>'>
-  tag-name = #'[^ \t/>]+'
+  opening-tag = <'<'> tag-name attributes? <maybe-spaces> <'>'>
+  closing-tag = <'</'> tag-name <maybe-spaces> <'>'>
+  self-closing-tag = <'<'> tag-name attributes? <maybe-spaces> <'/>'>
+  tag-name = #'[^ \"\\'\t\f\r\n/>]+'
   attributes = (<spaces> attribute)+
-  attribute = attribute-name (<'='> (unquoted-attribute-value | quoted-attribute-value))?
-  <attribute-name> = #'[^ \t=>]+'
-  <unquoted-attribute-value> = #'[^ \t>]+'
-  quoted-attribute-value = #'\"[^\"]*\"'
+  attribute = attribute-name (<maybe-spaces> <'='> <maybe-spaces> attribute-value)?
+  <attribute-value> = unquoted-attribute-value | single-quoted-attribute-value | double-quoted-attribute-value
+  <attribute-name> = #'[^ \"\\'\t\f\r\n=>]+'
+  <unquoted-attribute-value> = #'[^ \"\\'\t\f\r\n>]+'
+  <single-quoted-attribute-value> = <'\\''> #'[^\\']*' <'\\''>
+  <double-quoted-attribute-value> = <'\"'> #'[^\"]*' <'\"'>
   <text> = #'[^<]+'
-  maybe-spaces = #'[ \t]*'
-  spaces = #'[ \t]+'
+  maybe-spaces = #'[ \t\f\r\n]*'
+  spaces = #'[ \t\f\r\n]+'
 ")
 
 (defn html->hiccup
@@ -52,8 +53,7 @@
                           :attribute                (fn ([attribute-name]
                                                          [(keyword attribute-name) true])
                                                         ([attribute-name attribute-value]
-                                                         [(keyword attribute-name) attribute-value]))
-                          :quoted-attribute-value   (fn [quoted-value] (edn/read-string quoted-value))}))))
+                                                         [(keyword attribute-name) attribute-value]))}))))
 
 (defn minify-hiccup
   "Get rid of blank strings where it doesn't influence the html semantic."

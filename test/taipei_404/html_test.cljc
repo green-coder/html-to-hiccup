@@ -5,7 +5,7 @@
 (deftest html->hiccup-test
   (testing "the basic usage"
     (are [html hiccup]
-      (= (html->hiccup html) hiccup)
+      (= hiccup (html->hiccup html))
 
       ;; Obligatory test
       "<p>hello, world</p>"
@@ -22,11 +22,6 @@
       ;; Sequence of html tags separated by texts
       "a<p/>b<img/>c"
       '("a" [:p] "b" [:img] "c")
-
-      ;; Tab used instead of spaces
-      "<a\thref=\"#anchor\"\thidden\t/>"
-      '([:a {:href "#anchor"
-             :hidden true}])
 
       ;; Void elements
       "<br><hr>"
@@ -45,17 +40,29 @@
       "<script src=/foo/bar/baz.js></script>"
       '([:script {:src "/foo/bar/baz.js"}])
 
+      ;; Single quoted attributes
+      "<script src='/foo/bar/baz.js'></script>"
+      '([:script {:src "/foo/bar/baz.js"}])
+
+      ;; Double quoted attributes
+      "<script src=\"/foo/bar/baz.js\"></script>"
+      '([:script {:src "/foo/bar/baz.js"}])
+
       ;; That thing that goes before the html element
       "<!doctype html>"
-      '([:!doctype {:html true}])))
+      '([:!doctype {:html true}])
+
+      ;; With space-like characters everywhere inside the tags
+      "a<p \n/>b<img src = /flower.jpg \r\n\f alt = \"A flower\" \n />c"
+      '("a" [:p] "b" [:img {:src "/flower.jpg", :alt "A flower"}] "c")))
 
   (testing "the :discard-comments option"
-    (is (= (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
-                         {:comment-keyword :!--})
-           '([:!-- "Some useful comment"] [:p [:!-- "Here also"]])))
-    (is (= (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
-                         {:comment-keyword nil})
-          '([:p])))))
+    (is (= '([:!-- "Some useful comment"] [:p [:!-- "Here also"]])
+           (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
+                         {:comment-keyword :!--})))
+    (is (= '([:p])
+           (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
+                          {:comment-keyword nil})))))
 
 (deftest minify-hiccup-test
   (testing "that blank strings are discarded"
