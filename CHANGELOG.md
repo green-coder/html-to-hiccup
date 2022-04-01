@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## v0.1.7
+
+### Fixed
+
+- `minify-hiccup` now doesn't alter the content of `[:code ...]` blocks in addition to the `[:pre ...]` blocks.
+
 ## v0.1.6
 
 ### Improved
