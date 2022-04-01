@@ -62,7 +62,7 @@
     (string? hiccup) (not-empty (str/trim hiccup))
     (map? hiccup) hiccup
     (vector? hiccup) (let [[tag-kw & children] hiccup]
-                       (if (= tag-kw :pre)
+                       (if (contains? #{:pre :code} tag-kw)
                          hiccup
                          (let [[first-child & rest-children] children
                                [props children] (if (or (nil? first-child)
