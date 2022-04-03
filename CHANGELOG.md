@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file. This change
 
 ## [Unreleased]
 
+## v0.1.8
+
+### Fixed
+
+- Added support for multiline comments.
+
 ## v0.1.7
 
 ### Fixed
