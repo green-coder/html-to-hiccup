@@ -28,9 +28,16 @@ which does not rely on the browser.
 ; => ([:p "hello, world"])
 ```
 
+## Contributing
+
+Pull Requests and bug reports are welcome.
+
+You can run the tests in the background by using `./bin/kaocha --watch` in a terminal
+while you are changing the source code in your preferred editor.
+
 ## License
 
-Copyright © 2022 Vincent Cantin
+Copyright © 2022 Vincent Cantin and contributors.
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
