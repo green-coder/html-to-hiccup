@@ -6,7 +6,7 @@
 (defparser html-parser "
   nodes = node*
   <node> = comment-element | void-element-tag | open-close-tags | self-closing-tag | text
-  comment-element = <'<!--'> (!'-->' #'(?s).')* <'-->'>
+  comment-element = <'<!--'> (!'-->' #'.|\n')* <'-->'>
   void-element-tag = <'<'> void-element-tag-name attributes? <maybe-spaces> <'>'>
   void-element-tag-name = 'area' | 'base' | 'basefont' | 'bgsound' | 'br' | 'col' |
                           'command' | 'embed' | 'frame' | 'hr' | 'img' | 'input' | 'isindex' |

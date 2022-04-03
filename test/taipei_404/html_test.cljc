@@ -63,13 +63,13 @@
     (is (= '([:p])
            (html->hiccup "<!--Some useful comment--><p><!--Here also--></p>"
                           {:comment-keyword nil}))))
+
   (testing "multiple line comments"
-    (is (= '("\n                         " [:h1 "foo"])
-           (html->hiccup "<!--
-                         some useful
-                         comment
-                         -->
-                         <h1>foo</h1>")))))
+    (is (= '([:!-- "\nsome useful\ncomment\n"] "\n" [:h1 "foo"])
+           (html->hiccup "<!--\nsome useful\ncomment\n-->\n<h1>foo</h1>"
+                         {:comment-keyword :!--})))
+    (is (= '("\n" [:h1 "foo"])
+           (html->hiccup "<!--\nsome useful\ncomment\n-->\n<h1>foo</h1>")))))
 
 (deftest minify-hiccup-test
   (testing "that blank strings are discarded"
